@@ -56,24 +56,17 @@
     .mk-logo {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: linear-gradient(120deg, #005bbb, #0f7ae5);
-      color: #fff;
-      border-radius: 999px;
-      padding: 5px 10px;
-      box-shadow: 0 4px 10px rgba(15, 122, 229, 0.2);
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.5px;
-      white-space: nowrap;
+      background: #ffffff;
+      border: 1px solid rgba(15, 122, 229, 0.25);
+      border-radius: 10px;
+      padding: 4px 8px;
+      box-shadow: 0 4px 10px rgba(15, 122, 229, 0.12);
     }
 
-    .mk-logo-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: #fff;
-      opacity: 0.95;
+    .mk-logo-img {
+      display: block;
+      height: 24px;
+      width: auto;
     }
 
     .brand {
@@ -114,14 +107,17 @@
       top: 10px;
       right: 10px;
       z-index: 1;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: rgba(0, 91, 187, 0.5);
       background: rgba(255, 255, 255, 0.75);
       border: 1px solid rgba(15, 122, 229, 0.25);
-      border-radius: 999px;
-      padding: 5px 9px;
+      border-radius: 8px;
+      padding: 4px 6px;
+    }
+
+    .mk-watermark img {
+      display: block;
+      width: 88px;
+      height: auto;
+      opacity: 0.58;
     }
 
     .track-svg {
@@ -439,8 +435,7 @@
     <header class="topbar">
       <div class="brand-wrap">
         <div class="mk-logo">
-          <span class="mk-logo-dot"></span>
-          <span>MICROKIDS</span>
+          <img src="assets/logo-microkids.png" alt="Logo Microkids" class="mk-logo-img" />
         </div>
         <div class="brand">Jornada</div>
       </div>
@@ -451,7 +446,9 @@
       <div class="subtitle" id="progressText">Fase atual: 1 de 10</div>
 
       <section class="track-wrap" id="trackWrap">
-        <div class="mk-watermark">MICROKIDS</div>
+        <div class="mk-watermark">
+          <img src="assets/logo-microkids.png" alt="Microkids" />
+        </div>
         <svg class="track-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <path class="track-path" d="M80,92 C15,89 17,73 50,70 C86,67 86,50 22,46 C8,45 8,31 48,27 C84,24 84,8 20,7" />
         </svg>
