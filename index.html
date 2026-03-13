@@ -56,17 +56,22 @@
     .mk-logo {
       display: flex;
       align-items: center;
-      background: #ffffff;
-      border: 1px solid rgba(15, 122, 229, 0.25);
+      background: #0b1f3a;
+      border: 1px solid rgba(15, 122, 229, 0.35);
       border-radius: 10px;
-      padding: 4px 8px;
+      padding: 0;
+      width: 120px;
+      height: 36px;
+      overflow: hidden;
       box-shadow: 0 4px 10px rgba(15, 122, 229, 0.12);
     }
 
     .mk-logo-img {
       display: block;
-      height: 24px;
-      width: auto;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     .brand {
@@ -107,17 +112,14 @@
       top: 10px;
       right: 10px;
       z-index: 1;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: rgba(0, 91, 187, 0.52);
       background: rgba(255, 255, 255, 0.75);
       border: 1px solid rgba(15, 122, 229, 0.25);
       border-radius: 8px;
-      padding: 4px 6px;
-    }
-
-    .mk-watermark img {
-      display: block;
-      width: 88px;
-      height: auto;
-      opacity: 0.58;
+      padding: 5px 9px;
     }
 
     .track-svg {
@@ -446,9 +448,7 @@
       <div class="subtitle" id="progressText">Fase atual: 1 de 10</div>
 
       <section class="track-wrap" id="trackWrap">
-        <div class="mk-watermark">
-          <img src="assets/logo-microkids.png" alt="Microkids" />
-        </div>
+        <div class="mk-watermark">MICROKIDS</div>
         <svg class="track-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <path class="track-path" d="M80,92 C15,89 17,73 50,70 C86,67 86,50 22,46 C8,45 8,31 48,27 C84,24 84,8 20,7" />
         </svg>
@@ -538,16 +538,16 @@
     const STORAGE_KEY = "jogoPalestraStateV2";
 
     const phases = [
-      { id: 1, title: "Futuro do neg├│cio", reward: 100, type: "text", description: "Qual a maior oportunidade para o seu neg├│cio crescer nos pr├│ximos meses?" },
-      { id: 2, title: "Decis├úo estrat├®gica", reward: 100, type: "text", description: "Como voc├¬ toma decis├Áes importantes hoje e o que poderia melhorar nesse processo?" },
+      { id: 1, title: "Futuro do negocio", reward: 100, type: "text", description: "Qual a maior oportunidade para o seu negocio crescer nos proximos meses?" },
+      { id: 2, title: "Decisao estrategica", reward: 100, type: "text", description: "Como voce toma decisoes importantes hoje e o que poderia melhorar nesse processo?" },
       { id: 3, title: "Desafio da foto", reward: 200, type: "upload", description: "Registre um momento da palestra e envie uma imagem para concluir esta etapa." },
-      { id: 4, title: "Automa├º├úo", reward: 100, type: "text", description: "Qual tarefa repetitiva voc├¬ mais gostaria de automatizar no seu neg├│cio?" },
-      { id: 5, title: "Cliente ideal", reward: 100, type: "text", description: "Descreva rapidamente o perfil de cliente que mais gera resultado para voc├¬." },
-      { id: 6, title: "Meta de curto prazo", reward: 100, type: "text", description: "Qual meta voc├¬ quer atingir em 30 dias e qual primeiro passo dar├í hoje?" },
+      { id: 4, title: "Automacao", reward: 100, type: "text", description: "Qual tarefa repetitiva voce mais gostaria de automatizar no seu negocio?" },
+      { id: 5, title: "Cliente ideal", reward: 100, type: "text", description: "Descreva rapidamente o perfil de cliente que mais gera resultado para voce." },
+      { id: 6, title: "Meta de curto prazo", reward: 100, type: "text", description: "Qual meta voce quer atingir em 30 dias e qual primeiro passo dara hoje?" },
       { id: 7, title: "Prova social", reward: 200, type: "upload", description: "Anexe uma imagem com depoimento, print ou material que represente sua marca." },
-      { id: 8, title: "Indicador principal", reward: 100, type: "text", description: "Qual n├║mero voc├¬ precisa acompanhar toda semana para tomar melhores decis├Áes?" },
-      { id: 9, title: "A├º├úo comercial", reward: 100, type: "text", description: "Qual a├º├úo pr├ítica voc├¬ pode aplicar amanh├ú para vender mais?" },
-      { id: 10, title: "Compromisso final", reward: 300, type: "text", description: "Qual compromisso voc├¬ assume hoje para continuar evoluindo ap├│s a palestra?" }
+      { id: 8, title: "Indicador principal", reward: 100, type: "text", description: "Qual numero voce precisa acompanhar toda semana para tomar melhores decisoes?" },
+      { id: 9, title: "Acao comercial", reward: 100, type: "text", description: "Qual acao pratica voce pode aplicar amanha para vender mais?" },
+      { id: 10, title: "Compromisso final", reward: 300, type: "text", description: "Qual compromisso voce assume hoje para continuar evoluindo apos a palestra?" }
     ];
 
     const nodePositions = [
@@ -564,14 +564,14 @@
     ];
 
     const prizes = [
-      { id: "bolsa-mk", name: "Bolsa Microkids", cost: 250, emoji: "­ƒæ£", description: "Bolsa exclusiva para materiais da jornada." },
-      { id: "estojo-mk", name: "Estojo Microkids", cost: 180, emoji: "­ƒÄÆ", description: "Estojo pratico para o dia a dia." },
-      { id: "garrafa", name: "Garrafa termica", cost: 220, emoji: "­ƒº┤", description: "Garrafa premium para cafe ou agua." },
-      { id: "camiseta", name: "Camiseta oficial", cost: 300, emoji: "­ƒæò", description: "Camiseta da comunidade de empreendedores." },
-      { id: "livro", name: "Livro de negocios", cost: 320, emoji: "­ƒôÿ", description: "Livro inspirador sobre crescimento empresarial." },
-      { id: "mentoria", name: "Mini mentoria", cost: 500, emoji: "­ƒºá", description: "Sessao curta de mentoria de estrategia." },
-      { id: "alexa", name: "Alexa Echo Dot", cost: 800, emoji: "­ƒöè", description: "Assistente inteligente para automacao." },
-      { id: "voucher", name: "Voucher parceiro", cost: 420, emoji: "­ƒÄƒ´©Å", description: "Desconto especial em servicos parceiros." }
+      { id: "bolsa-mk", name: "Bolsa Microkids", cost: 250, description: "Bolsa exclusiva para materiais da jornada." },
+      { id: "estojo-mk", name: "Estojo Microkids", cost: 180, description: "Estojo pratico para o dia a dia." },
+      { id: "garrafa", name: "Garrafa termica", cost: 220, description: "Garrafa premium para cafe ou agua." },
+      { id: "camiseta", name: "Camiseta oficial", cost: 300, description: "Camiseta da comunidade de empreendedores." },
+      { id: "livro", name: "Livro de negocios", cost: 320, description: "Livro inspirador sobre crescimento empresarial." },
+      { id: "mentoria", name: "Mini mentoria", cost: 500, description: "Sessao curta de mentoria de estrategia." },
+      { id: "alexa", name: "Alexa Echo Dot", cost: 800, description: "Assistente inteligente para automacao." },
+      { id: "voucher", name: "Voucher parceiro", cost: 420, description: "Desconto especial em servicos parceiros." }
     ];
 
     const trackWrap = document.getElementById("trackWrap");
@@ -787,7 +787,7 @@
         card.className = "prize-card";
         card.innerHTML = `
           <div class="prize-top">
-            <div class="prize-title">${prize.emoji} ${prize.name}</div>
+            <div class="prize-title">${prize.name}</div>
             <div class="prize-price">$ ${prize.cost}</div>
           </div>
           <p>${prize.description}</p>
