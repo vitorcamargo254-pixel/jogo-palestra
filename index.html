@@ -132,9 +132,9 @@
     .track-path {
       fill: none;
       stroke: var(--line);
-      stroke-width: 3;
+      stroke-width: 2;
       stroke-linecap: round;
-      stroke-dasharray: 8 7;
+      stroke-dasharray: 6 7;
       opacity: 0.92;
     }
 
@@ -457,7 +457,6 @@
       <div class="controls">
         <button class="btn-secondary" id="resetBtn">Reiniciar progresso</button>
         <button class="btn-primary" id="openCurrentBtn">Abrir fase atual</button>
-        <button class="btn-secondary" id="exportBtn">Exportar respostas (.json)</button>
       </div>
     </section>
 
@@ -530,7 +529,6 @@
     </div>
     <div class="actions">
       <button class="btn-secondary" id="closeFinalBtn">Fechar</button>
-      <button class="btn-primary" id="exportFinalBtn">Exportar respostas</button>
     </div>
   </div>
 
@@ -579,7 +577,6 @@
     const progressText = document.getElementById("progressText");
     const openCurrentBtn = document.getElementById("openCurrentBtn");
     const resetBtn = document.getElementById("resetBtn");
-    const exportBtn = document.getElementById("exportBtn");
     const prizesList = document.getElementById("prizesList");
     const profileName = document.getElementById("profileName");
     const profileBusiness = document.getElementById("profileBusiness");
@@ -609,7 +606,6 @@
     const successNote = document.getElementById("successNote");
     const finalScoreText = document.getElementById("finalScoreText");
     const closeFinalBtn = document.getElementById("closeFinalBtn");
-    const exportFinalBtn = document.getElementById("exportFinalBtn");
 
     let selectedPhase = null;
     let currentTab = "jornadas";
@@ -749,32 +745,6 @@
       const next = currentId + 1;
       if (next > phases.length) return null;
       return next;
-    }
-
-    function exportAnswers() {
-      const payload = {
-        exportedAt: new Date().toISOString(),
-        summary: {
-          completedCount: state.completed.length,
-          totalPhases: phases.length,
-          coinsEarned: state.coins,
-          coinsSpent: state.spentCoins,
-          coinsAvailable: getAvailableCoins()
-        },
-        profile: state.profile,
-        prizes: {
-          unlocked: state.unlockedPrizes
-        },
-        answers: state.answers
-      };
-
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "respostas-jornada.json";
-      a.click();
-      URL.revokeObjectURL(url);
     }
 
     function buildPrizes() {
@@ -921,7 +891,6 @@
     }
 
     openCurrentBtn.addEventListener("click", () => openPhaseModal(getCurrentPhaseId()));
-    exportBtn.addEventListener("click", exportAnswers);
     saveProfileBtn.addEventListener("click", saveProfile);
     navButtons.forEach((btn) => {
       btn.addEventListener("click", () => setTab(btn.dataset.tab));
@@ -944,7 +913,6 @@
     modalBackdrop.addEventListener("click", closeModal);
     submitChallengeBtn.addEventListener("click", completePhase);
     closeFinalBtn.addEventListener("click", closeModal);
-    exportFinalBtn.addEventListener("click", exportAnswers);
     fileAnswer.addEventListener("change", () => {
       const file = fileAnswer.files[0];
       fileHint.textContent = file ? `Arquivo selecionado: ${file.name}` : "Nenhum arquivo selecionado.";
