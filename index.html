@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
@@ -6,14 +6,14 @@
   <title>Jornada Interativa - Palestra</title>
   <style>
     :root {
-      --bg: #05070f;
-      --card: #f4f6f8;
-      --primary: #6d28d9;
-      --primary-2: #7c3aed;
+      --bg: #e8f3ff;
+      --card: #ffffff;
+      --primary: #005bbb;
+      --primary-2: #0f7ae5;
       --success: #16a34a;
       --warning: #94a3b8;
-      --text: #0f172a;
-      --line: #d8dde5;
+      --text: #0f2a4a;
+      --line: #7fb1e3;
     }
 
     * { box-sizing: border-box; }
@@ -21,8 +21,8 @@
     body {
       margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
-      background: radial-gradient(circle at 50% -20%, #1c2032 0%, var(--bg) 50%);
-      color: #e5e7eb;
+      background: radial-gradient(circle at 50% -20%, #ffffff 0%, var(--bg) 70%);
+      color: var(--text);
       min-height: 100vh;
     }
 
@@ -38,23 +38,53 @@
       position: sticky;
       top: 0;
       z-index: 5;
-      background: rgba(5, 7, 15, 0.92);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(8px);
-      border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+      border-bottom: 1px solid rgba(15, 122, 229, 0.2);
       padding: 14px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mk-logo {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(120deg, #005bbb, #0f7ae5);
+      color: #fff;
+      border-radius: 999px;
+      padding: 5px 10px;
+      box-shadow: 0 4px 10px rgba(15, 122, 229, 0.2);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .mk-logo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #fff;
+      opacity: 0.95;
+    }
+
     .brand {
       font-size: 20px;
       font-weight: 800;
       letter-spacing: 0.4px;
+      color: var(--primary);
     }
 
     .coins {
-      background: #0b6bd4;
+      background: var(--primary);
       color: #f8fafc;
       padding: 8px 12px;
       border-radius: 12px;
@@ -65,7 +95,7 @@
 
     .subtitle {
       padding: 14px 16px 0;
-      color: #cbd5e1;
+      color: #1e3a5f;
       font-size: 14px;
     }
 
@@ -74,9 +104,24 @@
       height: 860px;
       margin: 10px 10px 0;
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(245, 251, 255, 0.95));
+      border: 1px solid rgba(15, 122, 229, 0.15);
       overflow: hidden;
+    }
+
+    .mk-watermark {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: rgba(0, 91, 187, 0.5);
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(15, 122, 229, 0.25);
+      border-radius: 999px;
+      padding: 5px 9px;
     }
 
     .track-svg {
@@ -89,9 +134,9 @@
     .track-path {
       fill: none;
       stroke: var(--line);
-      stroke-width: 6;
+      stroke-width: 3;
       stroke-linecap: round;
-      stroke-dasharray: 12 10;
+      stroke-dasharray: 8 7;
       opacity: 0.92;
     }
 
@@ -100,9 +145,9 @@
       width: 66px;
       height: 66px;
       border-radius: 999px;
-      border: 3px solid #d1d5db;
-      background: #f8fafc;
-      color: #6b21a8;
+      border: 3px solid #8ec0ee;
+      background: #ffffff;
+      color: var(--primary);
       display: grid;
       place-items: center;
       font-size: 30px;
@@ -117,13 +162,13 @@
     .node.locked {
       filter: grayscale(0.9);
       opacity: 0.8;
-      color: #64748b;
+      color: #7b92a8;
       cursor: not-allowed;
     }
 
     .node.current {
-      border-color: #10b981;
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+      border-color: var(--primary-2);
+      box-shadow: 0 0 0 4px rgba(15, 122, 229, 0.24);
     }
 
     .node.done {
@@ -144,7 +189,7 @@
     }
 
     .status.done { background: #16a34a; color: #fff; }
-    .status.current { background: #0ea5e9; color: #fff; }
+    .status.current { background: var(--primary); color: #fff; }
     .status.locked { background: #64748b; color: #fff; }
 
     .controls {
@@ -164,7 +209,7 @@
     }
 
     .btn-primary { background: var(--primary); color: #fff; }
-    .btn-secondary { background: #1f2937; color: #e5e7eb; border: 1px solid #334155; }
+    .btn-secondary { background: #ffffff; color: var(--primary); border: 1px solid #78aee1; }
 
     .footer {
       position: fixed;
@@ -172,9 +217,9 @@
       left: 50%;
       transform: translateX(-50%);
       width: min(460px, 100%);
-      background: rgba(2, 6, 23, 0.98);
-      border-top: 1px solid rgba(148, 163, 184, 0.25);
-      color: #cbd5e1;
+      background: rgba(255, 255, 255, 0.97);
+      border-top: 1px solid rgba(15, 122, 229, 0.22);
+      color: var(--primary);
       display: flex;
       justify-content: space-around;
       padding: 8px;
@@ -185,7 +230,7 @@
     .nav-btn {
       flex: 1;
       background: transparent;
-      color: #cbd5e1;
+      color: var(--primary);
       border: 1px solid transparent;
       border-radius: 10px;
       font-weight: 700;
@@ -193,9 +238,9 @@
     }
 
     .nav-btn.active {
-      background: #0b6bd4;
+      background: var(--primary);
       color: #fff;
-      border-color: #60a5fa;
+      border-color: #8ec0ee;
     }
 
     .view {
@@ -210,8 +255,8 @@
     .panel {
       margin: 10px;
       border-radius: 14px;
-      background: rgba(15, 23, 42, 0.75);
-      border: 1px solid rgba(148, 163, 184, 0.2);
+      background: #ffffff;
+      border: 1px solid rgba(15, 122, 229, 0.2);
       padding: 12px;
     }
 
@@ -222,7 +267,7 @@
 
     .panel p {
       margin: 4px 0 0;
-      color: #cbd5e1;
+      color: #31567c;
       font-size: 14px;
       line-height: 1.4;
     }
@@ -234,11 +279,11 @@
     }
 
     .prize-card {
-      background: #e2e8f0;
+      background: #ffffff;
       color: #0f172a;
       border-radius: 12px;
       padding: 10px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid #b7d7f4;
     }
 
     .prize-top {
@@ -254,7 +299,7 @@
     }
 
     .prize-price {
-      background: #0b6bd4;
+      background: var(--primary);
       color: #fff;
       border-radius: 999px;
       padding: 4px 8px;
@@ -276,7 +321,7 @@
 
     .profile-grid label {
       font-size: 13px;
-      color: #cbd5e1;
+      color: #31567c;
       font-weight: 600;
     }
 
@@ -284,27 +329,27 @@
       margin-top: 4px;
       width: 100%;
       border-radius: 10px;
-      border: 1px solid #475569;
-      background: #0f172a;
-      color: #e2e8f0;
+      border: 1px solid #b7d7f4;
+      background: #ffffff;
+      color: var(--text);
       padding: 10px;
       font: inherit;
     }
 
     .stats-box {
       margin-top: 10px;
-      border-top: 1px dashed rgba(148, 163, 184, 0.4);
+      border-top: 1px dashed rgba(15, 122, 229, 0.35);
       padding-top: 10px;
       display: grid;
       gap: 8px;
       font-size: 14px;
-      color: #e2e8f0;
+      color: #31567c;
     }
 
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(2, 6, 23, 0.72);
+      background: rgba(0, 47, 95, 0.45);
       display: none;
       z-index: 20;
     }
@@ -327,13 +372,13 @@
 
     .modal h2 {
       margin: 0 0 10px;
-      color: #0b3b63;
+      color: var(--primary);
       font-size: 32px;
     }
 
     .modal h3 { margin: 8px 0; font-size: 21px; }
     .modal p { font-size: 22px; line-height: 1.42; margin: 8px 0; }
-    .small { font-size: 19px; color: #334155; }
+    .small { font-size: 19px; color: #31567c; }
 
     textarea, input[type="file"] {
       width: 100%;
@@ -353,7 +398,7 @@
 
     .actions button { flex: 1; }
 
-    .hint { color: #475569; font-size: 14px; margin-top: 6px; }
+    .hint { color: #31567c; font-size: 14px; margin-top: 6px; }
     .success-note {
       margin-top: 10px;
       background: #dcfce7;
@@ -372,14 +417,14 @@
 
     .final-card h3 {
       margin: 0 0 8px;
-      color: #14532d;
+      color: var(--primary);
       font-size: 30px;
     }
 
     .final-score {
       font-size: 24px;
       font-weight: 800;
-      color: #0f172a;
+      color: var(--primary);
       margin: 8px 0 12px;
     }
 
@@ -392,7 +437,13 @@
 <body>
   <div class="app">
     <header class="topbar">
-      <div class="brand">Jornada</div>
+      <div class="brand-wrap">
+        <div class="mk-logo">
+          <span class="mk-logo-dot"></span>
+          <span>MICROKIDS</span>
+        </div>
+        <div class="brand">Jornada</div>
+      </div>
       <div class="coins" id="coinsBox">$ 0</div>
     </header>
 
@@ -400,6 +451,7 @@
       <div class="subtitle" id="progressText">Fase atual: 1 de 10</div>
 
       <section class="track-wrap" id="trackWrap">
+        <div class="mk-watermark">MICROKIDS</div>
         <svg class="track-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <path class="track-path" d="M80,92 C15,89 17,73 50,70 C86,67 86,50 22,46 C8,45 8,31 48,27 C84,24 84,8 20,7" />
         </svg>
