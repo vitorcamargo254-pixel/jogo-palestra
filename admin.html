@@ -158,8 +158,8 @@
 
     function buildPlayerUrl(eventId, momento) {
       const url = new URL(baseUrl());
-      url.searchParams.set("evento", eventId);
-      url.searchParams.set("momento", String(momento));
+      url.searchParams.set("e", eventId);
+      url.searchParams.set("m", String(momento));
       return url.toString();
     }
 

@@ -4,12 +4,12 @@
 
   function getEventIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return (params.get("evento") || "microkids-palestra").trim();
+    return (params.get("evento") || params.get("e") || "microkids-palestra").trim();
   }
 
   function getMomentFromUrl() {
     const params = new URLSearchParams(window.location.search);
-    return (params.get("momento") || "1").trim();
+    return (params.get("momento") || params.get("m") || "1").trim();
   }
 
   function getMaxPhaseFromUrl(totalPhases) {
