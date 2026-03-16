@@ -78,6 +78,16 @@
       vertical-align: top;
     }
     .muted { color: #4b6688; font-size: 12px; }
+    .thumb {
+      width: 76px;
+      height: 76px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #dbeafb;
+      display: block;
+      margin-bottom: 4px;
+      background: #fff;
+    }
   </style>
 </head>
 <body>
@@ -184,17 +194,38 @@
         return;
       }
       list.forEach((item) => {
-        const answer = item.answer_type === "upload"
-          ? (item.file_name || "(arquivo nao informado)")
-          : (item.answer_text || "");
         const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${new Date(item.created_at || Date.now()).toLocaleString()}</td>
-          <td>${item.participant_name || "-"}</td>
-          <td>${item.phase_id || "-"}</td>
-          <td>${item.answer_type || "-"}</td>
-          <td>${answer}</td>
-        `;
+        const tdDate = document.createElement("td");
+        const tdName = document.createElement("td");
+        const tdPhase = document.createElement("td");
+        const tdType = document.createElement("td");
+        const tdAnswer = document.createElement("td");
+
+        tdDate.textContent = new Date(item.created_at || Date.now()).toLocaleString();
+        tdName.textContent = item.participant_name || "-";
+        tdPhase.textContent = String(item.phase_id || "-");
+        tdType.textContent = item.answer_type || "-";
+
+        if (item.answer_type === "upload") {
+          if (item.answer_text && String(item.answer_text).startsWith("data:image")) {
+            const img = document.createElement("img");
+            img.className = "thumb";
+            img.src = item.answer_text;
+            img.alt = item.file_name || "Imagem enviada";
+            tdAnswer.appendChild(img);
+          }
+          const fileName = document.createElement("div");
+          fileName.textContent = item.file_name || "(arquivo nao informado)";
+          tdAnswer.appendChild(fileName);
+        } else {
+          tdAnswer.textContent = item.answer_text || "";
+        }
+
+        tr.appendChild(tdDate);
+        tr.appendChild(tdName);
+        tr.appendChild(tdPhase);
+        tr.appendChild(tdType);
+        tr.appendChild(tdAnswer);
         responsesBody.appendChild(tr);
       });
     }

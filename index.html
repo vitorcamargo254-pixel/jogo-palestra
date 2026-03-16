@@ -891,6 +891,15 @@
       if (tabName === "perfil") renderProfile();
     }
 
+    function readFileAsDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ""));
+        reader.onerror = () => reject(new Error("Falha ao ler arquivo."));
+        reader.readAsDataURL(file);
+      });
+    }
+
     async function completePhase() {
       if (!selectedPhase) return;
       if (selectedPhase.id > maxPhaseAllowed) {
@@ -899,6 +908,7 @@
       }
       const alreadyDone = state.completed.includes(selectedPhase.id);
       const participantName = participantInput.value.trim();
+      let uploadDataUrl = "";
       if (!participantName) {
         alert("Digite o nome do participante antes de enviar.");
         participantInput.focus();
@@ -919,6 +929,7 @@
           return;
         }
         if (file) {
+          uploadDataUrl = await readFileAsDataUrl(file);
           state.answers[selectedPhase.id] = { type: "upload", fileName: file.name };
         }
       }
@@ -937,7 +948,7 @@
           participantName,
           phaseId: selectedPhase.id,
           answerType: answer.type || selectedPhase.type,
-          answerText: answer.value || "",
+          answerText: uploadDataUrl || answer.value || "",
           fileName: answer.fileName || ""
         });
       } catch (err) {
