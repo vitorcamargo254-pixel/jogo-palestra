@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin - Jornada</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #eef6ff;
+      color: #0f2a4a;
+    }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #cfe4f8;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+    }
+    h1 { margin: 0 0 10px; color: #005bbb; }
+    h2 { margin: 0 0 10px; font-size: 18px; color: #0f2a4a; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    input, button, select {
+      border: 1px solid #b7d7f4;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font: inherit;
+    }
+    input { min-width: 220px; }
+    button {
+      background: #005bbb;
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .qr-grid {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+    .qr-card {
+      border: 1px solid #dbeafb;
+      border-radius: 10px;
+      padding: 10px;
+      background: #f8fbff;
+    }
+    .qr-card img {
+      width: 140px;
+      height: 140px;
+      border: 1px solid #dbeafb;
+      border-radius: 8px;
+      background: #fff;
+    }
+    .url-box {
+      font-size: 12px;
+      background: #fff;
+      border: 1px solid #dbeafb;
+      border-radius: 8px;
+      padding: 8px;
+      word-break: break-all;
+      margin-top: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+    th, td {
+      border-bottom: 1px solid #e2ecf8;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    .muted { color: #4b6688; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Painel Admin - Jornada Microkids</h1>
+
+    <div class="card">
+      <h2>Configuracao do evento</h2>
+      <div class="row">
+        <label for="eventInput"><strong>Evento:</strong></label>
+        <input id="eventInput" type="text" value="microkids-palestra" />
+        <button id="generateBtn">Gerar links e QR</button>
+        <button id="loadBtn">Atualizar respostas</button>
+      </div>
+      <p class="muted">Use um QR por momento: 1 (fases 1-4), 2 (1-7), 3 (1-10).</p>
+    </div>
+
+    <div class="card">
+      <h2>QR por momento</h2>
+      <div id="qrGrid" class="qr-grid"></div>
+    </div>
+
+    <div class="card">
+      <h2>Respostas recebidas</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Horario</th>
+            <th>Participante</th>
+            <th>Fase</th>
+            <th>Tipo</th>
+            <th>Resposta</th>
+          </tr>
+        </thead>
+        <tbody id="responsesBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app-config.js"></script>
+  <script src="./data-service.js"></script>
+  <script>
+    const eventInput = document.getElementById("eventInput");
+    const generateBtn = document.getElementById("generateBtn");
+    const loadBtn = document.getElementById("loadBtn");
+    const qrGrid = document.getElementById("qrGrid");
+    const responsesBody = document.getElementById("responsesBody");
+
+    function baseUrl() {
+      const { origin, pathname } = window.location;
+      const root = pathname.replace(/\/admin\.html.*$/, "/");
+      return `${origin}${root}index.html`;
+    }
+
+    function buildPlayerUrl(eventId, momento) {
+      const url = new URL(baseUrl());
+      url.searchParams.set("evento", eventId);
+      url.searchParams.set("momento", String(momento));
+      return url.toString();
+    }
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Link copiado.");
+      });
+    }
+
+    function renderQRCards() {
+      const eventId = eventInput.value.trim() || "microkids-palestra";
+      const labels = {
+        1: "Momento 1 (fases 1-4)",
+        2: "Momento 2 (fases 1-7)",
+        3: "Momento 3 (fases 1-10)"
+      };
+      qrGrid.innerHTML = "";
+
+      [1, 2, 3].forEach((momento) => {
+        const url = buildPlayerUrl(eventId, momento);
+        const qr = `https://api.qrserver.com/v1/create-qr-code/?size=350x350&data=${encodeURIComponent(url)}`;
+        const card = document.createElement("div");
+        card.className = "qr-card";
+        card.innerHTML = `
+          <h3>${labels[momento]}</h3>
+          <img src="${qr}" alt="QR Momento ${momento}" />
+          <div class="url-box">${url}</div>
+          <div class="row" style="margin-top:8px;">
+            <button data-url="${url}" class="copy-btn">Copiar link</button>
+            <a href="${url}" target="_blank" rel="noreferrer">Abrir</a>
+          </div>
+        `;
+        qrGrid.appendChild(card);
+      });
+
+      document.querySelectorAll(".copy-btn").forEach((btn) => {
+        btn.addEventListener("click", () => copyText(btn.dataset.url));
+      });
+    }
+
+    function renderResponses(list) {
+      responsesBody.innerHTML = "";
+      if (!list.length) {
+        responsesBody.innerHTML = `<tr><td colspan="5">Nenhuma resposta ainda.</td></tr>`;
+        return;
+      }
+      list.forEach((item) => {
+        const answer = item.answer_type === "upload"
+          ? (item.file_name || "(arquivo nao informado)")
+          : (item.answer_text || "");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${new Date(item.created_at || Date.now()).toLocaleString()}</td>
+          <td>${item.participant_name || "-"}</td>
+          <td>${item.phase_id || "-"}</td>
+          <td>${item.answer_type || "-"}</td>
+          <td>${answer}</td>
+        `;
+        responsesBody.appendChild(tr);
+      });
+    }
+
+    async function loadResponses() {
+      const eventId = eventInput.value.trim() || "microkids-palestra";
+      try {
+        const list = await window.DataService.listResponses(eventId);
+        renderResponses(list);
+      } catch (err) {
+        alert("Falha ao carregar respostas. Verifique app-config.js (modo e Supabase).");
+      }
+    }
+
+    generateBtn.addEventListener("click", () => {
+      renderQRCards();
+      loadResponses();
+    });
+    loadBtn.addEventListener("click", loadResponses);
+
+    renderQRCards();
+    loadResponses();
+  </script>
+</body>
+</html>

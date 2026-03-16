@@ -97,6 +97,35 @@
       font-size: 14px;
     }
 
+    .session-bar {
+      margin: 8px 12px 2px;
+      display: grid;
+      gap: 8px;
+      background: #ffffff;
+      border: 1px solid rgba(15, 122, 229, 0.2);
+      border-radius: 10px;
+      padding: 10px;
+      color: #31567c;
+      font-size: 13px;
+    }
+
+    .session-row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .session-row input {
+      border: 1px solid #b7d7f4;
+      border-radius: 8px;
+      padding: 6px 8px;
+      font: inherit;
+      min-width: 180px;
+      color: var(--text);
+      background: #fff;
+    }
+
     .track-wrap {
       position: relative;
       height: 860px;
@@ -446,6 +475,17 @@
 
     <section class="view active" id="view-jornadas">
       <div class="subtitle" id="progressText">Fase atual: 1 de 10</div>
+      <div class="session-bar">
+        <div class="session-row">
+          <strong>Evento:</strong> <span id="eventLabel">-</span>
+          <strong>Momento:</strong> <span id="momentLabel">-</span>
+          <strong>Liberado ate:</strong> <span id="maxPhaseLabel">-</span>
+        </div>
+        <div class="session-row">
+          <label for="participantInput"><strong>Participante:</strong></label>
+          <input id="participantInput" type="text" placeholder="Digite seu nome" />
+        </div>
+      </div>
 
       <section class="track-wrap" id="trackWrap">
         <div class="mk-watermark">MICROKIDS</div>
@@ -532,6 +572,9 @@
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./app-config.js"></script>
+  <script src="./data-service.js"></script>
   <script>
     const STORAGE_KEY = "jogoPalestraStateV2";
 
@@ -575,6 +618,10 @@
     const trackWrap = document.getElementById("trackWrap");
     const coinsBox = document.getElementById("coinsBox");
     const progressText = document.getElementById("progressText");
+    const eventLabel = document.getElementById("eventLabel");
+    const momentLabel = document.getElementById("momentLabel");
+    const maxPhaseLabel = document.getElementById("maxPhaseLabel");
+    const participantInput = document.getElementById("participantInput");
     const openCurrentBtn = document.getElementById("openCurrentBtn");
     const resetBtn = document.getElementById("resetBtn");
     const prizesList = document.getElementById("prizesList");
@@ -610,6 +657,10 @@
     let selectedPhase = null;
     let currentTab = "jornadas";
     let state = loadState();
+    const eventId = window.DataService.getEventIdFromUrl();
+    const momentId = window.DataService.getMomentFromUrl();
+    const maxPhaseAllowed = window.DataService.getMaxPhaseFromUrl(phases.length);
+    const participantStorageKey = `jogo-participante-${eventId}`;
 
     function loadState() {
       try {
@@ -646,12 +697,14 @@
 
     function getCurrentPhaseId() {
       for (const phase of phases) {
+        if (phase.id > maxPhaseAllowed) break;
         if (!state.completed.includes(phase.id)) return phase.id;
       }
-      return phases[phases.length - 1].id;
+      return maxPhaseAllowed;
     }
 
     function isLocked(phaseId) {
+      if (phaseId > maxPhaseAllowed) return true;
       const current = getCurrentPhaseId();
       return phaseId > current;
     }
@@ -689,6 +742,10 @@
     }
 
     function onClickPhase(phaseId) {
+      if (phaseId > maxPhaseAllowed) {
+        alert(`Esta fase sera liberada em outro momento da palestra. Agora esta liberado ate a fase ${maxPhaseAllowed}.`);
+        return;
+      }
       if (isLocked(phaseId)) {
         alert("Essa fase ainda esta bloqueada. Conclua as anteriores primeiro.");
         return;
@@ -834,9 +891,19 @@
       if (tabName === "perfil") renderProfile();
     }
 
-    function completePhase() {
+    async function completePhase() {
       if (!selectedPhase) return;
+      if (selectedPhase.id > maxPhaseAllowed) {
+        alert(`No momento atual, a liberacao vai ate a fase ${maxPhaseAllowed}.`);
+        return;
+      }
       const alreadyDone = state.completed.includes(selectedPhase.id);
+      const participantName = participantInput.value.trim();
+      if (!participantName) {
+        alert("Digite o nome do participante antes de enviar.");
+        participantInput.focus();
+        return;
+      }
 
       if (selectedPhase.type === "text") {
         const value = textAnswer.value.trim();
@@ -862,6 +929,20 @@
       }
 
       saveState();
+      localStorage.setItem(participantStorageKey, participantName);
+      const answer = state.answers[selectedPhase.id] || {};
+      try {
+        await window.DataService.saveResponse({
+          eventId,
+          participantName,
+          phaseId: selectedPhase.id,
+          answerType: answer.type || selectedPhase.type,
+          answerText: answer.value || "",
+          fileName: answer.fileName || ""
+        });
+      } catch (err) {
+        alert("Resposta salva localmente, mas falhou no envio central. Verifique a configuracao do DataService.");
+      }
       render();
       successNote.style.display = "block";
 
@@ -884,7 +965,10 @@
     function render() {
       coinsBox.textContent = `$ ${getAvailableCoins()}`;
       const current = getCurrentPhaseId();
-      progressText.textContent = `Fase atual: ${current} de ${phases.length} | Concluidas: ${state.completed.length}`;
+      progressText.textContent = `Fase atual: ${current} de ${maxPhaseAllowed} | Concluidas: ${state.completed.length}`;
+      eventLabel.textContent = eventId;
+      momentLabel.textContent = momentId;
+      maxPhaseLabel.textContent = String(maxPhaseAllowed);
       buildNodes();
       if (currentTab === "premios") buildPrizes();
       if (currentTab === "perfil") renderProfile();
@@ -911,13 +995,14 @@
     });
     closeModalBtn.addEventListener("click", closeModal);
     modalBackdrop.addEventListener("click", closeModal);
-    submitChallengeBtn.addEventListener("click", completePhase);
+    submitChallengeBtn.addEventListener("click", () => { completePhase(); });
     closeFinalBtn.addEventListener("click", closeModal);
     fileAnswer.addEventListener("change", () => {
       const file = fileAnswer.files[0];
       fileHint.textContent = file ? `Arquivo selecionado: ${file.name}` : "Nenhum arquivo selecionado.";
     });
 
+    participantInput.value = localStorage.getItem(participantStorageKey) || "";
     setTab("jornadas");
     render();
   </script>
