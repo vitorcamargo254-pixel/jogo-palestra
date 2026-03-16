@@ -900,6 +900,27 @@
       });
     }
 
+    async function buildImagePreviewDataUrl(file) {
+      const raw = await readFileAsDataUrl(file);
+      const img = new Image();
+      img.src = raw;
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+      });
+
+      const maxSize = 540;
+      const ratio = Math.min(maxSize / img.width, maxSize / img.height, 1);
+      const targetW = Math.max(1, Math.round(img.width * ratio));
+      const targetH = Math.max(1, Math.round(img.height * ratio));
+      const canvas = document.createElement("canvas");
+      canvas.width = targetW;
+      canvas.height = targetH;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, targetW, targetH);
+      return canvas.toDataURL("image/jpeg", 0.8);
+    }
+
     async function completePhase() {
       if (!selectedPhase) return;
       if (selectedPhase.id > maxPhaseAllowed) {
@@ -924,14 +945,12 @@
         state.answers[selectedPhase.id] = { type: "text", value };
       } else {
         const file = fileAnswer.files[0];
-        if (!file && !state.answers[selectedPhase.id]) {
-          alert("Selecione uma imagem para concluir.");
+        if (!file) {
+          alert("Selecione uma imagem antes de enviar.");
           return;
         }
-        if (file) {
-          uploadDataUrl = await readFileAsDataUrl(file);
-          state.answers[selectedPhase.id] = { type: "upload", fileName: file.name };
-        }
+        uploadDataUrl = await buildImagePreviewDataUrl(file);
+        state.answers[selectedPhase.id] = { type: "upload", fileName: file.name, imageDataUrl: uploadDataUrl };
       }
 
       if (!alreadyDone) {
@@ -948,7 +967,7 @@
           participantName,
           phaseId: selectedPhase.id,
           answerType: answer.type || selectedPhase.type,
-          answerText: uploadDataUrl || answer.value || "",
+          answerText: uploadDataUrl || answer.imageDataUrl || answer.value || "",
           fileName: answer.fileName || ""
         });
       } catch (err) {
