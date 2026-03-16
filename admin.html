@@ -88,6 +88,19 @@
       margin-bottom: 4px;
       background: #fff;
     }
+    .thumb-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 4px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .thumb-link {
+      font-size: 12px;
+      color: #005bbb;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -213,6 +226,26 @@
             img.src = item.answer_text;
             img.alt = item.file_name || "Imagem enviada";
             tdAnswer.appendChild(img);
+
+            const actions = document.createElement("div");
+            actions.className = "thumb-actions";
+
+            const openLink = document.createElement("a");
+            openLink.className = "thumb-link";
+            openLink.href = item.answer_text;
+            openLink.target = "_blank";
+            openLink.rel = "noreferrer";
+            openLink.textContent = "Abrir";
+
+            const downloadLink = document.createElement("a");
+            downloadLink.className = "thumb-link";
+            downloadLink.href = item.answer_text;
+            downloadLink.download = item.file_name || `upload-fase-${item.phase_id || "x"}.jpg`;
+            downloadLink.textContent = "Baixar";
+
+            actions.appendChild(openLink);
+            actions.appendChild(downloadLink);
+            tdAnswer.appendChild(actions);
           }
           const fileName = document.createElement("div");
           fileName.textContent = item.file_name || "(arquivo nao informado)";
