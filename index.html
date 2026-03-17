@@ -479,7 +479,7 @@
         <div class="session-row">
           <strong>Evento:</strong> <span id="eventLabel">-</span>
           <strong>Momento:</strong> <span id="momentLabel">-</span>
-          <strong>Liberado ate:</strong> <span id="maxPhaseLabel">-</span>
+          <strong>Liberado até:</strong> <span id="maxPhaseLabel">-</span>
         </div>
         <div class="session-row">
           <label for="participantInput"><strong>Participante:</strong></label>
@@ -502,7 +502,7 @@
 
     <section class="view" id="view-premios">
       <div class="panel">
-        <h3>Loja de premios</h3>
+        <h3>Loja de prêmios</h3>
         <p>Use suas moedas para resgatar brindes da palestra.</p>
       </div>
       <div class="prizes-list" id="prizesList"></div>
@@ -521,7 +521,7 @@
           <input type="text" id="profileBusiness" placeholder="Nome da empresa" />
         </label>
         <label>Meta principal
-          <textarea id="profileGoal" rows="3" placeholder="Qual sua meta para os proximos 30 dias?"></textarea>
+          <textarea id="profileGoal" rows="3" placeholder="Qual sua meta para os próximos 30 dias?"></textarea>
         </label>
         <button class="btn-primary" id="saveProfileBtn">Salvar perfil</button>
         <div class="stats-box" id="profileStats"></div>
@@ -531,7 +531,7 @@
 
   <div class="footer">
     <button type="button" class="nav-btn active" data-tab="jornadas">Jornadas</button>
-    <button type="button" class="nav-btn" data-tab="premios">Premios</button>
+    <button type="button" class="nav-btn" data-tab="premios">Prêmios</button>
     <button type="button" class="nav-btn" data-tab="perfil">Perfil</button>
   </div>
 
@@ -561,10 +561,10 @@
   </div>
 
   <div class="modal" id="finalModal">
-    <h2>Parabens!</h2>
+    <h2>Parabéns!</h2>
     <div class="final-card">
-      <h3>Jornada concluida</h3>
-      <p>Voce completou todas as fases com sucesso.</p>
+      <h3>Jornada concluída</h3>
+      <p>Você completou todas as fases com sucesso.</p>
       <div class="final-score" id="finalScoreText"></div>
     </div>
     <div class="actions">
@@ -579,16 +579,16 @@
     const STORAGE_KEY = "jogoPalestraStateV2";
 
     const phases = [
-      { id: 1, title: "Desafio - Cenario da educacao hoje", reward: 100, type: "text", description: "A tecnologia faz parte da vida dos alunos, mas ainda traz desafios dentro da escola. Pergunta: Qual e hoje o maior desafio para trabalhar tecnologia com os alunos em sala de aula?" },
-      { id: 2, title: "Desafio - Experiencia com tecnologia", reward: 100, type: "text", description: "Grandes mudancas comecam com pequenas experiencias. Pergunta: Voce ja utilizou alguma ferramenta digital com seus alunos? Conte brevemente como foi." },
-      { id: 3, title: "Desafio - BNCC da Computacao", reward: 100, type: "text", description: "Ensinar tecnologia e preparar os alunos para o futuro. Pergunta: Antes desta formacao, voce ja conhecia a BNCC da Computacao?" },
-      { id: 4, title: "Desafio - Pensamento Computacional", reward: 100, type: "text", description: "Resolver problemas e uma habilidade essencial do seculo XXI. Pergunta: Qual das opcoes abaixo representa uma habilidade do Pensamento Computacional?" },
-      { id: 5, title: "Desafio - Cultura Digital", reward: 100, type: "text", description: "Mais do que usar tecnologia, precisamos aprender a criar com ela. Pergunta: Qual habilidade digital voce considera mais importante para os alunos hoje?" },
-      { id: 6, title: "Desafio - Metodologia Microkids", reward: 100, type: "text", description: "Aprender fazendo torna o conhecimento mais significativo. Pergunta: O que mais chamou sua atencao na metodologia Microkids apresentada hoje?" },
-      { id: 7, title: "Desafio - Momento da formacao", reward: 200, type: "upload", description: "Tire uma foto de um momento interessante da formacao e envie aqui." },
-      { id: 8, title: "Desafio - Compartilhe a experiencia", reward: 200, type: "upload", description: "Faca uma postagem sobre esta formacao em sua rede social e marque @microkids.oficial. Depois envie aqui um print da sua postagem." },
-      { id: 9, title: "Desafio - Aplicacao na pratica", reward: 100, type: "text", description: "O verdadeiro aprendizado acontece quando colocamos em pratica. Pergunta: Apos esta formacao, voce acredita que conseguira aplicar atividades com tecnologia com seus alunos?" },
-      { id: 10, title: "Desafio final - Palavra da jornada", reward: 300, type: "text", description: "Toda formacao gera aprendizados e reflexoes. Pergunta: Se voce pudesse resumir esta formacao em uma palavra, qual seria?" }
+      { id: 1, title: "Desafio - O cenário da educação hoje", reward: 100, type: "text", description: "A tecnologia faz parte da vida dos alunos, mas ainda traz desafios dentro da escola. Pergunta: Qual é hoje o maior desafio para trabalhar tecnologia com os alunos em sala de aula?" },
+      { id: 2, title: "Desafio - Experiência com tecnologia", reward: 100, type: "text", description: "Grandes mudanças começam com pequenas experiências. Pergunta: Você já utilizou alguma ferramenta digital com seus alunos? Conte brevemente como foi." },
+      { id: 3, title: "Desafio - BNCC da Computação", reward: 100, type: "text", description: "Ensinar tecnologia é preparar os alunos para o futuro. Pergunta: Antes desta formação, você já conhecia a BNCC da Computação?" },
+      { id: 4, title: "Desafio - Pensamento Computacional", reward: 100, type: "text", description: "Resolver problemas é uma habilidade essencial do século XXI. Pergunta: Qual das opções abaixo representa uma habilidade do Pensamento Computacional?" },
+      { id: 5, title: "Desafio - Cultura Digital", reward: 100, type: "text", description: "Mais do que usar tecnologia, precisamos aprender a criar com ela. Pergunta: Qual habilidade digital você considera mais importante para os alunos hoje?" },
+      { id: 6, title: "Desafio - Metodologia Microkids", reward: 100, type: "text", description: "Aprender fazendo torna o conhecimento mais significativo. Pergunta: O que mais chamou sua atenção na metodologia Microkids apresentada hoje?" },
+      { id: 7, title: "Desafio - Momento da formação", reward: 200, type: "upload", description: "Tire uma foto de um momento interessante da formação e envie aqui." },
+      { id: 8, title: "Desafio - Compartilhe a experiência", reward: 200, type: "upload", description: "Faça uma postagem sobre esta formação em sua rede social e marque @microkids.oficial. Depois envie aqui um print da sua postagem." },
+      { id: 9, title: "Desafio - Aplicação na prática", reward: 100, type: "text", description: "O verdadeiro aprendizado acontece quando colocamos em prática. Pergunta: Após esta formação, você acredita que conseguirá aplicar atividades com tecnologia com seus alunos?" },
+      { id: 10, title: "Desafio final - Palavra da jornada", reward: 300, type: "text", description: "Toda formação gera aprendizados e reflexões. Pergunta: Se você pudesse resumir esta formação em uma palavra, qual seria?" }
     ];
 
     const nodePositions = [
@@ -606,13 +606,13 @@
 
     const prizes = [
       { id: "bolsa-mk", name: "Bolsa Microkids", cost: 250, description: "Bolsa exclusiva para materiais da jornada." },
-      { id: "estojo-mk", name: "Estojo Microkids", cost: 180, description: "Estojo pratico para o dia a dia." },
-      { id: "garrafa", name: "Garrafa termica", cost: 220, description: "Garrafa premium para cafe ou agua." },
+      { id: "estojo-mk", name: "Estojo Microkids", cost: 180, description: "Estojo prático para o dia a dia." },
+      { id: "garrafa", name: "Garrafa térmica", cost: 220, description: "Garrafa premium para café ou água." },
       { id: "camiseta", name: "Camiseta oficial", cost: 300, description: "Camiseta da comunidade de empreendedores." },
-      { id: "livro", name: "Livro de negocios", cost: 320, description: "Livro inspirador sobre crescimento empresarial." },
-      { id: "mentoria", name: "Mini mentoria", cost: 500, description: "Sessao curta de mentoria de estrategia." },
-      { id: "alexa", name: "Alexa Echo Dot", cost: 800, description: "Assistente inteligente para automacao." },
-      { id: "voucher", name: "Voucher parceiro", cost: 420, description: "Desconto especial em servicos parceiros." }
+      { id: "livro", name: "Livro de negócios", cost: 320, description: "Livro inspirador sobre crescimento empresarial." },
+      { id: "mentoria", name: "Mini mentoria", cost: 500, description: "Sessão curta de mentoria de estratégia." },
+      { id: "alexa", name: "Alexa Echo Dot", cost: 800, description: "Assistente inteligente para automação." },
+      { id: "voucher", name: "Voucher parceiro", cost: 420, description: "Desconto especial em serviços parceiros." }
     ];
 
     const trackWrap = document.getElementById("trackWrap");
@@ -736,14 +736,14 @@
     }
 
     function labelStatus(status) {
-      if (status === "done") return "Concluida";
+      if (status === "done") return "Concluída";
       if (status === "current") return "Atual";
       return "Bloqueada";
     }
 
     function onClickPhase(phaseId) {
       if (phaseId > maxPhaseAllowed) {
-        alert(`Esta fase sera liberada em outro momento da palestra. Agora esta liberado ate a fase ${maxPhaseAllowed}.`);
+        alert(`Esta fase será liberada em outro momento da palestra. Agora está liberado até a fase ${maxPhaseAllowed}.`);
         return;
       }
       if (isLocked(phaseId)) {
@@ -841,7 +841,7 @@
       if (state.unlockedPrizes.includes(prize.id)) return;
 
       if (getAvailableCoins() < prize.cost) {
-        alert("Voce nao tem moedas suficientes para este premio.");
+        alert("Você não tem moedas suficientes para este prêmio.");
         return;
       }
 
@@ -849,7 +849,7 @@
       state.spentCoins += prize.cost;
       saveState();
       render();
-      alert(`Premio resgatado: ${prize.name}!`);
+      alert(`Prêmio resgatado: ${prize.name}!`);
     }
 
     function renderProfile() {
@@ -863,7 +863,7 @@
         <div>Moedas ganhas: <strong>$ ${state.coins}</strong></div>
         <div>Moedas gastas: <strong>$ ${state.spentCoins}</strong></div>
         <div>Saldo atual: <strong>$ ${getAvailableCoins()}</strong></div>
-        <div>Premios resgatados: <strong>${unlockedCount}</strong></div>
+        <div>Prêmios resgatados: <strong>${unlockedCount}</strong></div>
         <div>Status: <strong>${achievement}</strong></div>
       `;
     }
@@ -924,7 +924,7 @@
     async function completePhase() {
       if (!selectedPhase) return;
       if (selectedPhase.id > maxPhaseAllowed) {
-        alert(`No momento atual, a liberacao vai ate a fase ${maxPhaseAllowed}.`);
+        alert(`No momento atual, a liberação vai até a fase ${maxPhaseAllowed}.`);
         return;
       }
       const alreadyDone = state.completed.includes(selectedPhase.id);
@@ -971,7 +971,7 @@
           fileName: answer.fileName || ""
         });
       } catch (err) {
-        alert("Resposta salva localmente, mas falhou no envio central. Verifique a configuracao do DataService.");
+        alert("Resposta salva localmente, mas falhou no envio central. Verifique a configuração do DataService.");
       }
       render();
       successNote.style.display = "block";
@@ -985,7 +985,7 @@
       }
 
       const nextPhaseId = getNextPhaseId(selectedPhase.id);
-      successNote.textContent = "Resposta enviada! Abrindo proxima fase...";
+      successNote.textContent = "Resposta enviada! Abrindo próxima fase...";
       setTimeout(() => {
         closeModal();
         if (nextPhaseId) openPhaseModal(nextPhaseId);
@@ -995,7 +995,7 @@
     function render() {
       coinsBox.textContent = `$ ${getAvailableCoins()}`;
       const current = getCurrentPhaseId();
-      progressText.textContent = `Fase atual: ${current} de ${maxPhaseAllowed} | Concluidas: ${state.completed.length}`;
+      progressText.textContent = `Fase atual: ${current} de ${maxPhaseAllowed} | Concluídas: ${state.completed.length}`;
       eventLabel.textContent = eventId;
       momentLabel.textContent = momentId;
       maxPhaseLabel.textContent = String(maxPhaseAllowed);

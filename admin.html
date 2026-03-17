@@ -108,7 +108,7 @@
     <h1>Painel Admin - Jornada Microkids</h1>
 
     <div class="card">
-      <h2>Configuracao do evento</h2>
+      <h2>Configuração do evento</h2>
       <div class="row">
         <label for="eventInput"><strong>Evento:</strong></label>
         <input id="eventInput" type="text" value="microkids-palestra" />
@@ -128,7 +128,7 @@
       <table>
         <thead>
           <tr>
-            <th>Horario</th>
+            <th>Horário</th>
             <th>Participante</th>
             <th>Fase</th>
             <th>Tipo</th>
@@ -203,7 +203,7 @@
     function renderResponses(list) {
       responsesBody.innerHTML = "";
       if (!list.length) {
-        responsesBody.innerHTML = `<tr><td colspan="5">Nenhuma resposta ainda.</td></tr>`;
+        responsesBody.innerHTML = `<tr><td colspan="5">Nenhuma resposta recebida ainda.</td></tr>`;
         return;
       }
       list.forEach((item) => {
